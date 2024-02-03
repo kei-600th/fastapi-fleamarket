@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body
+from fastapi import APIRouter
 from api.cruds import item as item_cruds
 from api.schemas import item as item_schemas
 
@@ -27,7 +27,7 @@ async def create(item_create: item_schemas.ItemCreate):
 
 
 @router.put("/{id}")
-async def update(id: int, item_update=Body()):
+async def update(id: int, item_update: item_schemas.ItemUpdate):
     return item_cruds.update(id, item_update)
 
 
