@@ -1,76 +1,50 @@
-from typing import Optional
+from sqlalchemy.orm import Session
 from api.schemas import item as item_schemas
+from api.models.item import Item
+
+# def find_all():
+#     return items
 
 
-class Item:
-    def __init__(
-        self,
-        id: int,
-        name: str,
-        price: int,
-        description: Optional[str],
-        status: item_schemas.ItemStatus
-    ):
-        self.id = id
-        self.name = name
-        self.price = price
-        self.description = description
-        self.status = status
+# def find_by_id(id: int):
+#     for item in items:
+#         if item.id == id:
+#             return item
+#     return None
 
 
-items = [
-    Item(1, "PC", 100000, "美品です", item_schemas.ItemStatus.ON_SALE),
-    Item(2, "スマートフォン", 50000, None, item_schemas.ItemStatus.ON_SALE),
-    Item(3, "Python本", 1000, "使用感あり", item_schemas.ItemStatus.SOLD_OUT),
-]
+# def find_by_name(name: str):
+#     filtered_items = []
+
+#     for item in items:
+#         if name in item.name:
+#             filtered_items.append(item)
+#     return filtered_items
 
 
-def find_all():
-    return items
-
-
-def find_by_id(id: int):
-    for item in items:
-        if item.id == id:
-            return item
-    return None
-
-
-def find_by_name(name: str):
-    filtered_items = []
-
-    for item in items:
-        if name in item.name:
-            filtered_items.append(item)
-    return filtered_items
-
-
-def create(item_create: item_schemas.ItemCreate):
+def create(db: Session, item_create: item_schemas.ItemCreate):
     new_item = Item(
-        len(items) + 1,
-        item_create.name,
-        item_create.price,
-        item_create.description,
-        item_schemas.ItemStatus.ON_SALE,
+        **item_create.model_dump()
     )
-    items.append(new_item)
+    db.add(new_item)
+    db.commit()
     return new_item
 
 
-def update(id: int, item_update: item_schemas.ItemUpdate):
-    for item in items:
-        if item.id == id:
-            item.name = item.name if item_update.name is None else item_update.name
-            item.price = item.price if item_update.price is None else item_update.price
-            item.description = item.description if item_update.description is None else item_update.description
-            item.status = item.status if item_update.status is None else item_update.status
-            return item
-    return None
+# def update(id: int, item_update: item_schemas.ItemUpdate):
+#     for item in items:
+#         if item.id == id:
+#             item.name = item.name if item_update.name is None else item_update.name
+#             item.price = item.price if item_update.price is None else item_update.price
+#             item.description = item.description if item_update.description is None else item_update.description
+#             item.status = item.status if item_update.status is None else item_update.status
+#             return item
+#     return None
 
 
-def delete(id: int):
-    for i in range(len(items)):
-        if items[i].id == id:
-            delete_item = items.pop(i)
-            return delete_item
-    return None
+# def delete(id: int):
+#     for i in range(len(items)):
+#         if items[i].id == id:
+#             delete_item = items.pop(i)
+#             return delete_item
+#     return None

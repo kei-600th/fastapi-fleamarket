@@ -1,7 +1,7 @@
 from datetime import datetime
-from database import Base
+from api.database import Base
 from sqlalchemy import Column, Integer, String, Enum, DateTime
-from schemas import item as item_schemas
+from api.schemas import item as item_schemas
 
 
 class Item(Base):
